@@ -1,0 +1,139 @@
+{
+	"info": {
+		"_postman_id": "747f445a-8e79-48d2-b869-788db625a4f8",
+		"name": "verizon_original",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40044506"
+	},
+	"item": [
+		{
+			"name": "oauth/client_credential/accesstoken",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "client_id",
+							"value": "wZpwWqjn23opEr2KZteBGriGbE21AC7r",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "qLqRQSJmmQAQJs5j",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://oa-uat.ebiz.verizon.com/oauth/client_credential/accesstoken?grant_type=client_credentials",
+					"protocol": "https",
+					"host": [
+						"oa-uat",
+						"ebiz",
+						"verizon",
+						"com"
+					],
+					"path": [
+						"oauth",
+						"client_credential",
+						"accesstoken"
+					],
+					"query": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials"
+						}
+					]
+				},
+				"description": "Generated from cURL: curl --location 'https://oa-uat.ebiz.verizon.com/oauth/client_credential/accesstoken?grant_type=client_credentials' \\\r\n--header 'Content-Type: application/x-www-form-urlencoded' \\\r\n--data-urlencode 'client_id=wZpwWqjn23opEr2KZteBGriGbE21AC7r' \\\r\n--data-urlencode 'client_secret=qLqRQSJmmQAQJs5j'"
+			},
+			"response": []
+		},
+		{
+			"name": "userAccessTokenInfo",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://oa-uat.ebiz.verizon.com/msjv-kirke-changemanagement/userAccessTokenInfo?username=SVC-gxov_kirke_np",
+					"protocol": "https",
+					"host": [
+						"oa-uat",
+						"ebiz",
+						"verizon",
+						"com"
+					],
+					"path": [
+						"msjv-kirke-changemanagement",
+						"userAccessTokenInfo"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "SVC-gxov_kirke_np"
+						}
+					]
+				},
+				"description": "Generated from cURL: curl --location 'https://oa-uat.ebiz.verizon.com/msjv-kirke-changemanagement/userAccessTokenInfo?username=SVC-gxov_kirke_np'"
+			},
+			"response": []
+		},
+		{
+			"name": "changerequests/v2",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer 2TEqxlsgGGfECkAlMFH5n6TZzAbs"
+					},
+					{
+						"key": "jwtToken",
+						"value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQi0jE3MzE5NDc2NTUsIm5hbWUiOiJTVkNfZ3hvd19raXJrZV9ucCIsImVtYWlsIjoic212YXJhbWEuc212YWx1bmthQHZlcml6b253aXJlbGVzcy5jb20ifQ.gh8AjGTyIwMzL7QI014272ks4nDzDjTsWAnIQNHQeaM"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"service-impact\": \"Non-Service Affecting\",\r\n\t\"risk-level\" :\"INCIDENT\",\r\n\t\"requester\" :\"SVC-gxov_kirke_np\",\r\n\t\"activity-category\": \"APPLICATION\",\r\n\t\"activity-type\": \"RESTART\",\r\n\t\"ticket-number\" : \"INC1001011\",\r\n\t\"description\": \"Automated Kirke plan/request creation by iEN-AP\",\r\n\t\"network\": \"CLOUD\",\r\n\t\"subnetwork\": \"CORE\",\r\n\t\"location\": {\r\n\t\t\"location-id\": 48447605\r\n\t},\r\n\t\"scheduled-start-date-time\": \"2024-11-26T23:00:00.000Z\",\r\n\t\"scheduled-end-date-time\": \"2024-11-26T23:05:00.000Z\",\r\n\t\"outage-details\": {\r\n\t\t\"outage-info\": {\r\n\t\t\t\"number-of-outages\": 0,\r\n\t\t\t\"outage-duration\": 1,\r\n\t\t\t\"outage-unit-of-measure\": \"Minutes\"\r\n\t\t}\r\n\t},\r\n\t\"mop\": [\r\n\t\t{\r\n\t\t\t\"mop-url\": \"https://www.verizon.com\",\r\n\t\t\t\"mop-comments\": \"MOP details not yet provided - contact requester.\",\r\n\t\t\t\"backout-duration\": \"00:01\"\r\n\t\t}\r\n\t],\r\n\t\"submitter\": \"SVC-gxov_kirke_np\",\r\n\t\"network-elements\": [\r\n\t  {\r\n\t\t\"ne-type\": \"Device\",\r\n\t\t\"ne-id\": \"twbgohaavzwcbsf-y-or-e1-000\"\r\n\t }\r\n\t ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://oa-uat.ebiz.verizon.com/msjv-kirke-changemanagement/changerequests/v2",
+					"protocol": "https",
+					"host": [
+						"oa-uat",
+						"ebiz",
+						"verizon",
+						"com"
+					],
+					"path": [
+						"msjv-kirke-changemanagement",
+						"changerequests",
+						"v2"
+					]
+				},
+				"description": "Generated from cURL: curl --location 'https://oa-uat.ebiz.verizon.com/msjv-kirke-changemanagement/changerequests/v2' \\\r\n--header 'Content-Type: application/json' \\\r\n--header 'accept: application/json' \\\r\n--header 'Authorization: Bearer 2TEqxlsgGGfECkAlMFH5n6TZzAbs' \\\r\n--header 'jwtToken: eyJhbGciOiJIUzI1NiJ9.eyJpYXQi0jE3MzE5NDc2NTUsIm5hbWUiOiJTVkNfZ3hvd19raXJrZV9ucCIsImVtYWlsIjoic212YXJhbWEuc212YWx1bmthQHZlcml6b253aXJlbGVzcy5jb20ifQ.gh8AjGTyIwMzL7QI014272ks4nDzDjTsWAnIQNHQeaM' \\\r\n--data '{\r\n\t\"service-impact\": \"Non-Service Affecting\",\r\n\t\"risk-level\" :\"INCIDENT\",\r\n\t\"requester\" :\"SVC-gxov_kirke_np\",\r\n\t\"activity-category\": \"APPLICATION\",\r\n\t\"activity-type\": \"RESTART\",\r\n\t\"ticket-number\" : \"INC1001011\",\r\n\t\"description\": \"Automated Kirke plan/request creation by iEN-AP\",\r\n\t\"network\": \"CLOUD\",\r\n\t\"subnetwork\": \"CORE\",\r\n\t\"location\": {\r\n\t\t\"location-id\": 48447605\r\n\t},\r\n\t\"scheduled-start-date-time\": \"2024-11-26T23:00:00.000Z\",\r\n\t\"scheduled-end-date-time\": \"2024-11-26T23:05:00.000Z\",\r\n\t\"outage-details\": {\r\n\t\t\"outage-info\": {\r\n\t\t\t\"number-of-outages\": 0,\r\n\t\t\t\"outage-duration\": 1,\r\n\t\t\t\"outage-unit-of-measure\": \"Minutes\"\r\n\t\t}\r\n\t},\r\n\t\"mop\": [\r\n\t\t{\r\n\t\t\t\"mop-url\": \"https://www.verizon.com\",\r\n\t\t\t\"mop-comments\": \"MOP details not yet provided - contact requester.\",\r\n\t\t\t\"backout-duration\": \"00:01\"\r\n\t\t}\r\n\t],\r\n\t\"submitter\": \"SVC-gxov_kirke_np\",\r\n\t\"network-elements\": [\r\n\t  {\r\n\t\t\"ne-type\": \"Device\",\r\n\t\t\"ne-id\": \"twbgohaavzwcbsf-y-or-e1-000\"\r\n\t }\r\n\t ]\r\n}'"
+			},
+			"response": []
+		}
+	]
+}
