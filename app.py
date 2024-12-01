@@ -91,9 +91,18 @@ async def get_access_token(request: AccessTokenRequest):
         # Check if the external API returned an error
         if response.status_code != 200:
             raise HTTPException(status_code=response.status_code, detail=response.text)
+        
+        # Parse and validate response
+        try:
+            response_data = response.json()
+            return AccessTokenResponse.model_validate(response_data)
+        except Exception as e:
+            raise HTTPException(
+                status_code=500,
+                detail=f"Response validation failed: {str(e)}"
+            )
 
-        # Parse and return the response from the external API
-        return response.json()
+        # return response.json()
 
     except httpx.RequestError as e:
         # Handle connection issues
@@ -111,9 +120,18 @@ async def get_user_access_token_info(username: str):
         # Check if the external API returned an error
         if response.status_code != 200:
             raise HTTPException(status_code=response.status_code, detail=response.text)
-
+        
+       # Parse and validate response
+        try:
+            response_data = response.json()
+            return UserAccessTokenInfoResponse.model_validate(response_data)
+        except Exception as e:
+            raise HTTPException(
+                status_code=500,
+                detail=f"Response validation failed: {str(e)}"
+            )
         # Parse and return the response from the external API
-        return response.json()
+        # return response.json()
 
     except httpx.RequestError as e:
         # Handle connection issues
@@ -138,15 +156,25 @@ async def create_change_request(
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(
-                CHANGE_REQUEST_URL, headers=headers, json=payload.dict(by_alias=True)
+                CHANGE_REQUEST_URL, headers=headers, json=payload.model_dump(by_alias=True)
             )
 
         # Check if the external API returned an error
         if response.status_code != 200:
             raise HTTPException(status_code=response.status_code, detail=response.text)
-
+        
+       # Parse and validate response
+        try:
+            response_data = response.json()
+            return ChangeRequestResponse.model_validate(response_data)
+        except Exception as e:
+            raise HTTPException(
+                status_code=500,
+                detail=f"Response validation failed: {str(e)}"
+            )
+        
         # Parse and return the response from the external API
-        return response.json()
+        # return response.json()
 
     except httpx.RequestError as e:
         # Handle connection issues
