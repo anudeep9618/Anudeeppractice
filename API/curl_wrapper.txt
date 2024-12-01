@@ -1,0 +1,56 @@
+
+curl -X POST "http://127.0.0.1:8000/get_access_token" \
+-H "Content-Type: application/json" \
+-d '{
+  "client_id": "wZpwWqjn23opEr2KZteBGriGbE21AC7r",
+  "client_secret": "qLqRQSJmmQAQJs5j"
+}'
+
+----------------------------------
+
+curl -X GET "http://127.0.0.1:8000/get_user_access_token_info?username=SVC-gxov_kirke_np" \
+-H "Content-Type: application/json"
+
+----------------------------------
+
+curl -X POST "http://127.0.0.1:8000/create_change_request" \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer your_authorization_token" \
+-H "jwtToken: your_jwt_token" \
+-d '{
+	"service-impact": "Non-Service Affecting",
+	"risk-level" :"INCIDENT",
+	"requester" :"SVC-gxov_kirke_np",
+	"activity-category": "APPLICATION",
+	"activity-type": "RESTART",
+	"ticket-number" : "INC1001011",
+	"description": "Automated Kirke plan/request creation by iEN-AP",
+	"network": "CLOUD",
+	"subnetwork": "CORE",
+	"location": {
+		"location-id": 48447605
+	},
+	"scheduled-start-date-time": "2024-11-26T23:00:00.000Z",
+	"scheduled-end-date-time": "2024-11-26T23:05:00.000Z",
+	"outage-details": {
+		"outage-info": {
+			"number-of-outages": 0,
+			"outage-duration": 1,
+			"outage-unit-of-measure": "Minutes"
+		}
+	},
+	"mop": [
+		{
+			"mop-url": "https://www.verizon.com",
+			"mop-comments": "MOP details not yet provided - contact requester.",
+			"backout-duration": "00:01"
+		}
+	],
+	"submitter": "SVC-gxov_kirke_np",
+	"network-elements": [
+	  {
+		"ne-type": "Device",
+		"ne-id": "twbgohaavzwcbsf-y-or-e1-000"
+	 }
+	 ]
+}'

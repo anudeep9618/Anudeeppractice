@@ -1,0 +1,54 @@
+
+curl --location 'https://oa-uat.ebiz.verizon.com/oauth/client%20credential/accesstoken?grant_type=client_credentials' \
+--header 'Content-Type: application/x-www-form-urlencoded' \
+--data-urlencode 'client_id=wZpwWqjn23opEr2KZteBGriGbE21AC7r' \
+--data-urlencode 'client_secret=qLqRQSJmmQAQJs5j'
+
+----------------------------------
+
+curl --location 'https://oa-uat.ebiz.verizon.com/msjv-kirke-changemanagement/userAccessTokenInfo?username=SVC-gxov_kirke_np'
+
+---------------------------------
+
+curl --location 'https://oa-uat.ebiz.verizon.com/msjv-kirke-changemanagement/changerequests/v2' \
+--header 'Content-Type: application/json' \
+--header 'accept: application/json' \
+--header 'Authorization: Bearer 2TEqxlsgGGfECkAlMFH5n6TZzAbs' \
+--header 'jwtToken: eyJhbGciOiJIUzI1NiJ9.eyJpYXQi0jE3MzE5NDc2NTUsIm5hbWUiOiJTVkNfZ3hvd19raXJrZV9ucCIsImVtYWlsIjoic212YXJhbWEuc212YWx1bmthQHZlcml6b253aXJlbGVzcy5jb20ifQ.gh8AjGTyIwMzL7QI014272ks4nDzDjTsWAnIQNHQeaM' \
+--data '{
+	"service-impact": "Non-Service Affecting",
+	"risk-level" :"INCIDENT",
+	"requester" :"SVC-gxov_kirke_np",
+	"activity-category": "APPLICATION",
+	"activity-type": "RESTART",
+	"ticket-number" : "INC1001011",
+	"description": "Automated Kirke plan/request creation by iEN-AP",
+	"network": "CLOUD",
+	"subnetwork": "CORE",
+	"location": {
+		"location-id": 48447605
+	},
+	"scheduled-start-date-time": "2024-11-26T23:00:00.000Z",
+	"scheduled-end-date-time": "2024-11-26T23:05:00.000Z",
+	"outage-details": {
+		"outage-info": {
+			"number-of-outages": 0,
+			"outage-duration": 1,
+			"outage-unit-of-measure": "Minutes"
+		}
+	},
+	"mop": [
+		{
+			"mop-url": "https://www.verizon.com",
+			"mop-comments": "MOP details not yet provided - contact requester.",
+			"backout-duration": "00:01"
+		}
+	],
+	"submitter": "SVC-gxov_kirke_np",
+	"network-elements": [
+	  {
+		"ne-type": "Device",
+		"ne-id": "twbgohaavzwcbsf-y-or-e1-000"
+	 }
+	 ]
+}'
