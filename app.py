@@ -82,120 +82,188 @@ class ChangeRequestPayload(BaseModel):
     submitter: str
     network_elements: List[NetworkElement] = Field(..., alias="network-elements")
 
-# Define Location model
+from typing import List, Optional, Dict, Any
+from pydantic import BaseModel
+
+class OCCLocation(BaseModel):
+    city: str
+    state: str
+    country: str
+    street: str
+
+class SiteCode(BaseModel):
+    site_code_id: int
+    name: str
+
 class Location(BaseModel):
-    vz_loc_id: str = Field(alias="vz-loc-id")
-    vz_loc_name: str = Field(alias="vz-loc-name")
+    vz_loc_id: str
+    vz_loc_name: str
+    source_system: str
     clli: str
-    sensitive_clli: bool = Field(alias="sensitive-clli")
+    sensitive_clli: bool
     id: int
-    name: Optional[str]
+    name: str
     address: str
     city: str
     state: str
     country: str
+    site_codes: List[SiteCode]
     timezone: str
-    timezone_id: str = Field(alias="timezone-id")
-    market_id: Optional[Any] = Field(alias="market-id")
-    market_name: Optional[Any] = Field(alias="market-name")
-    submarket_id: Optional[Any] = Field(alias="submarket-id")
-    submarket_name: Optional[Any] = Field(alias="submarket-name")
-    source_system_site_id: str = Field(alias="source-system-site-id")
-    source_system: str = Field(alias="source-system")
+    timezone_id: str
+    market_id: int
+    market_name: str
+    submarket_id: int
+    submarket_name: str
 
-# Define User model
 class User(BaseModel):
-    user_id: str = Field(alias="user-id")
-    display_name: str = Field(alias="display-name")
+    user_id: str
+    display_name: str
     email: str
 
-# Define RelatedTicket model
 class RelatedTicket(BaseModel):
-    ticket_source_id: Optional[Any] = Field(alias="ticket-source-id")
-    ticket_source_name: Optional[Any] = Field(alias="ticket-source-name")
-    ticket_number: Optional[Any]
+    ticket_source_id: int
+    ticket_source_name: str
+    ticket_number: str
 
-# Define RequestNeListItem model
-class RequestNeListItem(BaseModel):
-    item_id: int = Field(alias="item-id")
-    item_name: str = Field(alias="item-name")
-    item_status_id: int = Field(alias="item-status-id")
-    item_status_name: str = Field(alias="item-status-name")
-    implementation_status_id: Optional[int] = Field(alias="implementation-status-id")
-    implementation_status_name: Optional[str] = Field(alias="implementation-status-name")
-    actual_start_date_time: str = Field(alias="actual-start-date-time")
-    actual_end_date_time: str = Field(alias="actual-end-date-time")
-    outages: List[Dict[str, Optional[Any]]]
-    ne_type: str = Field(alias="ne-type")
-    is_ne_inventoried: bool = Field(alias="is-ne-inventoried")
-    ne_id: str = Field(alias="ne-id")
+class MopFile(BaseModel):
+    file_name: str
+    file_path: str
 
-# Define RequestConflict model
+class MopStep(BaseModel):
+    step_seq: int
+    step_details: str
+
+class BackoutStep(BaseModel):
+    step_seq: int
+    step_details: str
+
+class NEApplication(BaseModel):
+    application_name: str
+    scope_of_impact: str
+    market: str
+    sub_market: List[str]
+
+class NERegion(BaseModel):
+    name: str
+    tenant_name: str
+
+class NECluster(BaseModel):
+    name: str
+    compute_node: List[str]
+
+class NEVirtualElement(BaseModel):
+    virtual_element_name: str
+
+class NEOutage(BaseModel):
+    outage_seq_id: int
+    outage_start_time: str
+    outage_end_time: str
+
+class RequestNE(BaseModel):
+    item_id: int
+    item_status_id: int
+    item_status_name: str
+    implementation_status_id: int
+    implementation_status_name: str
+    actual_start_date_time: str
+    actual_end_date_time: str
+    ne_id: str
+    ne_type: str
+    ne_asp: Optional[List[Dict[str, Any]]]
+    ne_application: Optional[Dict[str, Any]]
+    ne_site: Optional[Dict[str, Any]]
+    ne_virtual_element: Optional[List[NEVirtualElement]]
+    number_of_outages: int
+    outage_duration: int
+    outage_unit_of_measure: str
+    outages: Optional[List[Dict[str, NEOutage]]]
+
+class RequestContact(BaseModel):
+    vzid: str
+    contact_role_name: str
+    send_email: bool
+
 class RequestConflict(BaseModel):
-    request_id: int = Field(alias="request-id")
-    conflict_rule_id: int = Field(alias="conflict-rule-id")
-    conflict_rule_name: str = Field(alias="conflict-rule-name")
-    freeze_name: Optional[str] = Field(alias="freeze-name")
+    freeze_name: str
+    request_id: int
+    conflict_rule_id: int
+    conflict_rule_name: str
 
-# Define main ChangeRequestResponseItem model
 class ChangeRequestResponseItem(BaseModel):
-    request_id: int = Field(alias="request-id")
-    plan_id: int = Field(alias="plan-id")
-    request_status: str = Field(alias="request-status")
-    approval_comments: Optional[Any] = Field(alias="approval-comments")
-    scheduled_start_date_time: str = Field(alias="scheduled-start-date-time")
-    scheduled_end_date_time: str = Field(alias="scheduled-end-date-time")
-    network_id: int = Field(alias="network-id")
-    network_name: str = Field(alias="network-name")
-    subnetwork_id: int = Field(alias="subnetwork-id")
-    subnetwork_name: str = Field(alias="subnetwork-name")
-    change_type_id: int = Field(alias="change-type-id")
-    change_type_name: str = Field(alias="change-type-name")
-    impact_level_id: int = Field(alias="impact-level-id")
-    impact_level_name: str = Field(alias="impact-level-name")
-    activity_category_id: int = Field(alias="activity-category-id")
-    activity_category_name: str = Field(alias="activity-category-name")
-    activity_type_id: int = Field(alias="activity-type-id")
-    activity_type_name: str = Field(alias="activity-type-name")
-    individual_cell_site: bool = Field(alias="individual-cell-site")
-    service_impact_id: int = Field(alias="service-impact-id")
-    service_impact_name: str = Field(alias="service-impact-name")
-    risk_level_id: int = Field(alias="risk-level-id")
-    risk_level_name: str = Field(alias="risk-level-name")
+    request_id: int
+    plan_id: int
+    request_status: str
+    approval_comments: Optional[str]
+    scheduled_start_date_time: str
+    scheduled_end_date_time: str
+    network_id: int
+    network_name: str
+    lead_time_violated: bool
+    maintenance_window_violated: bool
+    subnetwork_id: int
+    subnetwork_name: str
+    individual_cell_site: bool
+    mpe_id: int
+    change_type_id: int
+    change_type_name: str
+    occ_location: OCCLocation
+    carrier_name: str
+    impact_level_id: int
+    impact_level_name: str
+    service_impact_id: int
+    service_impact_name: str
+    risk_level_id: int
+    risk_level_name: str
+    activity_category_id: int
+    activity_category_name: str
+    activity_type_id: int
+    activity_type_name: str
     description: str
     location: Location
-    occ_location: Optional[Any] = Field(alias="occ-location")
-    carrier_name: Optional[Any] = Field(alias="carrier-name")
     requester: User
     submitter: User
-    implementer: Optional[Any]
-    related_ticket: RelatedTicket
-    reference_id: Optional[Any] = Field(alias="reference-id")
-    project_id: Optional[Any] = Field(alias="project-id")
-    mpe_id: Optional[Any] = Field(alias="mpe-id")
-    lead_time_violated: bool = Field(alias="lead-time-violated")
-    maintenance_window_violated: bool = Field(alias="maintenance-window-violated")
-    created_date_time: str = Field(alias="created-date-time")
-    last_modified_by: Optional[Any] = Field(alias="last-modified-by")
-    last_modified_date_time: str = Field(alias="last-modified-date-time")
-    mop_files: List[Any] = Field(alias="mop-files")
-    mop_url: str = Field(alias="mop-url")
-    mop_id: Optional[Any] = Field(alias="mop-id")
-    mop_steps: List[Any] = Field(alias="mop-steps")
-    mop_comments: str = Field(alias="mop-comments")
-    backout_duration: str = Field(alias="backout-duration")
-    backout_procedure: List[Any] = Field(alias="backout-procedure")
-    request_ne_list: List[RequestNeListItem] = Field(alias="request-ne-list")
-    request_contacts: List[Any] = Field(alias="request-contacts")
-    request_conflicts: List[RequestConflict] = Field(alias="request-conflicts", default_factory=list)
-    nen_services: Optional[Any] = Field(alias="nen-services")
-    policy_justification: List[Any] = Field(alias="policy-justification")
+    implementer: User
+    related_ticket: Optional[RelatedTicket]
+    reference_id: str
+    project_id: int
+    created_date_time: str
+    last_modified_by: User
+    last_modified_date_time: str
+    mop_files: Optional[List[MopFile]]
+    mop_url: Optional[str]
+    mop_id: Optional[str]
+    mop_steps: Optional[List[MopStep]]
+    mop_comments: Optional[str]
+    backout_duration: str
+    backout_procedure: Optional[List[List[BackoutStep]]]
+    request_ne_list: Optional[List[RequestNE]]
+    request_contacts: Optional[List[RequestContact]]
+    request_conflicts: Optional[List[RequestConflict]]
+    additional_prop1: Optional[Dict[str, Any]]
 
 class ChangeRequestResponse(RootModel):
     root: List[List[ChangeRequestResponseItem]]
 
 class GetChangeRequestResponse(RootModel):
     root: List[ChangeRequestResponseItem]
+
+class AccessMethodResponse(BaseModel):
+    token: str
+
+@app.post("/get_access_token_method", response_model=AccessMethodResponse)
+async def get_access_token_method(request: AccessTokenRequest):
+    # Replace hardcoded credentials with environment variables or config variables
+    VALID_CLIENT_ID = "svc-vsop-sa"
+    VALID_CLIENT_SECRET = "sdfdsgsdadsgeaga"
+
+    # Validate credentials
+    if request.client_id != VALID_CLIENT_ID or request.client_secret != VALID_CLIENT_SECRET:
+        raise HTTPException(status_code=400, detail="Incorrect Client ID or Client Password")
+
+    # Generate token (use a secure approach in production)
+    token = "123456789opoiuyttt"
+
+    return AccessMethodResponse(token=token)
 
 @app.post("/get_access_token", response_model=AccessTokenResponse)
 async def get_access_token(request: AccessTokenRequest):
