@@ -45,201 +45,377 @@ class UserAccessTokenInfoResponse(BaseModel):
 
 # Input model for the request payload
 class Location(BaseModel):
-    location_id: int = Field(..., alias="location-id")
+    location_id: Optional[int] = Field(None, alias="location-id")
+    location_name: Optional[str] = Field(None, alias="location-name")
+    address: Optional[str] = None
+    city: Optional[str] = None
+    state: Optional[str] = None
+    country: Optional[str] = None
+    clli_code: Optional[str] = Field(None, alias="clli-code")
 
 class OutageInfo(BaseModel):
-    number_of_outages: int = Field(..., alias="number-of-outages")
-    outage_duration: int = Field(..., alias="outage-duration")
-    outage_unit_of_measure: str = Field(..., alias="outage-unit-of-measure")
+    number_of_outages: Optional[int] = Field(None, alias="number-of-outages")
+    outage_duration: Optional[int] = Field(None, alias="outage-duration")
+    outage_unit_of_measure: Optional[str] = Field(None, alias="outage-unit-of-measure")
+    outages: Optional[List[dict]] = None  # Handling the outages field if it's provided
 
 class OutageDetails(BaseModel):
-    outage_info: OutageInfo = Field(..., alias="outage-info")
+    outage_info: Optional[OutageInfo] = Field(None, alias="outage-info")
 
 class MOP(BaseModel):
-    mop_url: str = Field(..., alias="mop-url")
-    mop_comments: str = Field(..., alias="mop-comments")
-    backout_duration: str = Field(..., alias="backout-duration")
+    mop_url: Optional[str] = Field(None, alias="mop-url")
+    mop_comments: Optional[str] = Field(None, alias="mop-comments")
+    backout_duration: Optional[str] = Field(None, alias="backout-duration")
+    mop_id: Optional[str] = Field(None, alias="mop-id")  # Optional field
+    mop_files: Optional[List[dict]] = None  # Handling the mop-files field
+    mop_steps: Optional[List[dict]] = None  # Handling the mop-steps field
+    backout_procedure: Optional[List[dict]] = None  # Handling backout-procedure field
 
 class NetworkElement(BaseModel):
-    ne_type: str = Field(..., alias="ne-type")
-    ne_id: str = Field(..., alias="ne-id")
+    ne_type: Optional[str] = Field(None, alias="ne-type")
+    ne_id: Optional[str] = Field(None, alias="ne-id")
+    ne_options: Optional[dict] = None  # Handling the ne-options field
+    ne_location: Optional[dict] = None  # Handling the ne-location field
+    ne_asp: Optional[List[dict]] = None  # Handling ne-asp field
+    ne_application: Optional[dict] = None  # Handling ne-application field
+    ne_site: Optional[dict] = None  # Handling ne-site field
+    ne_virtual_element: Optional[List[dict]] = None  # Handling ne-virtual-element field
 
 class ChangeRequestPayload(BaseModel):
-    service_impact: str = Field(..., alias="service-impact")
-    risk_level: str = Field(..., alias="risk-level")
-    requester: str
-    activity_category: str = Field(..., alias="activity-category")
-    activity_type: str = Field(..., alias="activity-type")
-    ticket_number: str = Field(..., alias="ticket-number")
-    description: str
-    network: str
-    subnetwork: str
-    location: Location
-    scheduled_start_date_time: str = Field(..., alias="scheduled-start-date-time")
-    scheduled_end_date_time: str = Field(..., alias="scheduled-end-date-time")
-    outage_details: OutageDetails = Field(..., alias="outage-details")
-    mop: List[MOP]
-    submitter: str
-    network_elements: List[NetworkElement] = Field(..., alias="network-elements")
+    reference_id: Optional[str] = Field(None, alias="reference-id")
+    service_impact: Optional[str] = Field(None, alias="service-impact")
+    risk_level: Optional[str] = Field(None, alias="risk-level")
+    requester: Optional[str] = None
+    activity_category: Optional[str] = Field(None, alias="activity-category")
+    activity_type: Optional[str] = Field(None, alias="activity-type")
+    ticket_number: Optional[str] = Field(None, alias="ticket-number")
+    description: Optional[str] = None
+    network: Optional[str] = None
+    subnetwork: Optional[str] = None
+    location: Optional[Location] = None
+    scheduled_start_date_time: Optional[str] = Field(None, alias="scheduled-start-date-time")
+    scheduled_end_date_time: Optional[str] = Field(None, alias="scheduled-end-date-time")
+    outage_details: Optional[OutageDetails] = Field(None, alias="outage-details")
+    mop: Optional[List[MOP]] = None
+    submitter: Optional[str] = None
+    network_elements: Optional[List[NetworkElement]] = Field(None, alias="network-elements")
+    individual_cell_site: Optional[bool] = Field(None, alias="individual-cell-site")  # Optional field
+    ticket_source: Optional[str] = Field(None, alias="ticket-source")  # Optional field
+    mpe_id: Optional[int] = Field(None, alias="mpe-id")  # Optional field
+    break_fix: Optional[bool] = Field(None, alias="break-fix")  # Optional field
+    contacts: Optional[List[dict]] = None  # Optional contacts field
 
-from typing import List, Optional, Dict, Any
-from pydantic import BaseModel
 
-class OCCLocation(BaseModel):
-    city: str
-    state: str
-    country: str
-    street: str
+# class Location(BaseModel):
+#     location_id: int = Field(..., alias="location-id")
 
-class SiteCode(BaseModel):
-    site_code_id: int
-    name: str
+# class OutageInfo(BaseModel):
+#     number_of_outages: int = Field(..., alias="number-of-outages")
+#     outage_duration: int = Field(..., alias="outage-duration")
+#     outage_unit_of_measure: str = Field(..., alias="outage-unit-of-measure")
+
+# class OutageDetails(BaseModel):
+#     outage_info: OutageInfo = Field(..., alias="outage-info")
+
+# class MOP(BaseModel):
+#     mop_url: str = Field(..., alias="mop-url")
+#     mop_comments: str = Field(..., alias="mop-comments")
+#     backout_duration: str = Field(..., alias="backout-duration")
+
+# class NetworkElement(BaseModel):
+#     ne_type: str = Field(..., alias="ne-type")
+#     ne_id: str = Field(..., alias="ne-id")
+
+# class ChangeRequestPayload(BaseModel):
+#     service_impact: str = Field(..., alias="service-impact")
+#     risk_level: str = Field(..., alias="risk-level")
+#     requester: str
+#     activity_category: str = Field(..., alias="activity-category")
+#     activity_type: str = Field(..., alias="activity-type")
+#     ticket_number: str = Field(..., alias="ticket-number")
+#     description: str
+#     network: str
+#     subnetwork: str
+#     location: Location
+#     scheduled_start_date_time: str = Field(..., alias="scheduled-start-date-time")
+#     scheduled_end_date_time: str = Field(..., alias="scheduled-end-date-time")
+#     outage_details: OutageDetails = Field(..., alias="outage-details")
+#     mop: List[MOP]
+#     submitter: str
+#     network_elements: List[NetworkElement] = Field(..., alias="network-elements")
+
+# class OCCLocation(BaseModel):
+#     city: str
+#     state: str
+#     country: str
+#     street: str
+
+# class SiteCode(BaseModel):
+#     site_code_id: int
+#     name: str
+
+# class Location(BaseModel):
+#     vz_loc_id: str
+#     vz_loc_name: str
+#     source_system: str
+#     clli: str
+#     sensitive_clli: bool
+#     id: int
+#     name: str
+#     address: str
+#     city: str
+#     state: str
+#     country: str
+#     site_codes: List[SiteCode]
+#     timezone: str
+#     timezone_id: str
+#     market_id: int
+#     market_name: str
+#     submarket_id: int
+#     submarket_name: str
+
+# class User(BaseModel):
+#     user_id: str
+#     display_name: str
+#     email: str
+
+# class RelatedTicket(BaseModel):
+#     ticket_source_id: int
+#     ticket_source_name: str
+#     ticket_number: str
+
+# class MopFile(BaseModel):
+#     file_name: str
+#     file_path: str
+
+# class MopStep(BaseModel):
+#     step_seq: int
+#     step_details: str
+
+# class BackoutStep(BaseModel):
+#     step_seq: int
+#     step_details: str
+
+# class NEApplication(BaseModel):
+#     application_name: str
+#     scope_of_impact: str
+#     market: str
+#     sub_market: List[str]
+
+# class NERegion(BaseModel):
+#     name: str
+#     tenant_name: str
+
+# class NECluster(BaseModel):
+#     name: str
+#     compute_node: List[str]
+
+# class NEVirtualElement(BaseModel):
+#     virtual_element_name: str
+
+# class NEOutage(BaseModel):
+#     outage_seq_id: int
+#     outage_start_time: str
+#     outage_end_time: str
+
+# class RequestNE(BaseModel):
+#     item_id: int
+#     item_status_id: int
+#     item_status_name: str
+#     implementation_status_id: int
+#     implementation_status_name: str
+#     actual_start_date_time: str
+#     actual_end_date_time: str
+#     ne_id: str
+#     ne_type: str
+#     ne_asp: Optional[List[Dict[str, Any]]]
+#     ne_application: Optional[Dict[str, Any]]
+#     ne_site: Optional[Dict[str, Any]]
+#     ne_virtual_element: Optional[List[NEVirtualElement]]
+#     number_of_outages: int
+#     outage_duration: int
+#     outage_unit_of_measure: str
+#     outages: Optional[List[Dict[str, NEOutage]]]
+
+# class RequestContact(BaseModel):
+#     vzid: str
+#     contact_role_name: str
+#     send_email: bool
+
+# class RequestConflict(BaseModel):
+#     freeze_name: str
+#     request_id: int
+#     conflict_rule_id: int
+#     conflict_rule_name: str
+
+# class ChangeRequestResponseItem(BaseModel):
+#     request_id: int
+#     plan_id: int
+#     request_status: str
+#     approval_comments: Optional[str]
+#     scheduled_start_date_time: str
+#     scheduled_end_date_time: str
+#     network_id: int
+#     network_name: str
+#     lead_time_violated: bool
+#     maintenance_window_violated: bool
+#     subnetwork_id: int
+#     subnetwork_name: str
+#     individual_cell_site: bool
+#     mpe_id: int
+#     change_type_id: int
+#     change_type_name: str
+#     occ_location: OCCLocation
+#     carrier_name: str
+#     impact_level_id: int
+#     impact_level_name: str
+#     service_impact_id: int
+#     service_impact_name: str
+#     risk_level_id: int
+#     risk_level_name: str
+#     activity_category_id: int
+#     activity_category_name: str
+#     activity_type_id: int
+#     activity_type_name: str
+#     description: str
+#     location: Location
+#     requester: User
+#     submitter: User
+#     implementer: User
+#     related_ticket: Optional[RelatedTicket]
+#     reference_id: str
+#     project_id: int
+#     created_date_time: str
+#     last_modified_by: User
+#     last_modified_date_time: str
+#     mop_files: Optional[List[MopFile]]
+#     mop_url: Optional[str]
+#     mop_id: Optional[str]
+#     mop_steps: Optional[List[MopStep]]
+#     mop_comments: Optional[str]
+#     backout_duration: str
+#     backout_procedure: Optional[List[List[BackoutStep]]]
+#     request_ne_list: Optional[List[RequestNE]]
+#     request_contacts: Optional[List[RequestContact]]
+#     request_conflicts: Optional[List[RequestConflict]]
+#     additional_prop1: Optional[Dict[str, Any]]
+
+class OccLocation(BaseModel):
+    city: Optional[str] = None
+    state: Optional[str] = None
+    country: Optional[str] = None
+    street: Optional[str] = None
 
 class Location(BaseModel):
-    vz_loc_id: str
-    vz_loc_name: str
-    source_system: str
-    clli: str
-    sensitive_clli: bool
-    id: int
-    name: str
-    address: str
-    city: str
-    state: str
-    country: str
-    site_codes: List[SiteCode]
-    timezone: str
-    timezone_id: str
-    market_id: int
-    market_name: str
-    submarket_id: int
-    submarket_name: str
+    vz_loc_id: Optional[str] = Field(None, alias="vz-loc-id")
+    vz_loc_name: Optional[str] = Field(None, alias="vz-loc-name")
+    source_system: Optional[str] = Field(None, alias="source-system")
+    source_system_site_id: Optional[str] = Field(None, alias="source-system-site-id")
+    clli: Optional[str] = None
+    sensitive_clli: Optional[bool] = Field(None, alias="sensitive-clli")
+    id: Optional[int] = None
+    name: Optional[str] = None
+    address: Optional[str] = None
+    city: Optional[str] = None
+    state: Optional[str] = None
+    country: Optional[str] = None
+    site_codes: Optional[List[dict]] = Field(None, alias="site-codes")
+    timezone: Optional[str] = None
+    timezone_id: Optional[str] = Field(None, alias="timezone-id")
+    market_id: Optional[int] = Field(None, alias="market-id")
+    market_name: Optional[str] = Field(None, alias="market-name")
+    submarket_id: Optional[int] = Field(None, alias="submarket-id")
+    submarket_name: Optional[str] = Field(None, alias="submarket-name")
 
 class User(BaseModel):
-    user_id: str
-    display_name: str
-    email: str
+    user_id: Optional[str] = Field(None, alias="user-id")
+    display_name: Optional[str] = Field(None, alias="display-name")
+    email: Optional[str] = None
 
 class RelatedTicket(BaseModel):
-    ticket_source_id: int
-    ticket_source_name: str
-    ticket_number: str
+    ticket_source_id: Optional[int] = Field(None, alias="ticket-source-id")
+    ticket_source_name: Optional[str] = Field(None, alias="ticket-source-name")
+    ticket_number: Optional[str] = Field(None, alias="ticket-number")
 
 class MopFile(BaseModel):
-    file_name: str
-    file_path: str
+    file_name: Optional[str] = Field(None, alias="file-name")
+    file_path: Optional[str] = Field(None, alias="file-path")
 
 class MopStep(BaseModel):
-    step_seq: int
-    step_details: str
-
-class BackoutStep(BaseModel):
-    step_seq: int
-    step_details: str
-
-class NEApplication(BaseModel):
-    application_name: str
-    scope_of_impact: str
-    market: str
-    sub_market: List[str]
-
-class NERegion(BaseModel):
-    name: str
-    tenant_name: str
-
-class NECluster(BaseModel):
-    name: str
-    compute_node: List[str]
-
-class NEVirtualElement(BaseModel):
-    virtual_element_name: str
-
-class NEOutage(BaseModel):
-    outage_seq_id: int
-    outage_start_time: str
-    outage_end_time: str
+    step_seq: Optional[int] = Field(None, alias="step-seq")
+    step_details: Optional[str] = Field(None, alias="step-details")
 
 class RequestNE(BaseModel):
-    item_id: int
-    item_status_id: int
-    item_status_name: str
-    implementation_status_id: int
-    implementation_status_name: str
-    actual_start_date_time: str
-    actual_end_date_time: str
-    ne_id: str
-    ne_type: str
-    ne_asp: Optional[List[Dict[str, Any]]]
-    ne_application: Optional[Dict[str, Any]]
-    ne_site: Optional[Dict[str, Any]]
-    ne_virtual_element: Optional[List[NEVirtualElement]]
-    number_of_outages: int
-    outage_duration: int
-    outage_unit_of_measure: str
-    outages: Optional[List[Dict[str, NEOutage]]]
-
-class RequestContact(BaseModel):
-    vzid: str
-    contact_role_name: str
-    send_email: bool
-
-class RequestConflict(BaseModel):
-    freeze_name: str
-    request_id: int
-    conflict_rule_id: int
-    conflict_rule_name: str
+    item_id: Optional[int] = Field(None, alias="item-id")
+    item_status_id: Optional[int] = Field(None, alias="item-status-id")
+    item_status_name: Optional[str] = Field(None, alias="item-status-name")
+    implementation_status_id: Optional[int] = Field(None, alias="implementation-status-id")
+    implementation_status_name: Optional[str] = Field(None, alias="implementation-status-name")
+    actual_start_date_time: Optional[str] = Field(None, alias="actual-start-date-time")
+    actual_end_date_time: Optional[str] = Field(None, alias="actual-end-date-time")
+    ne_id: Optional[str] = Field(None, alias="ne-id")
+    ne_type: Optional[str] = Field(None, alias="ne-type")
+    ne_asp: Optional[List[dict]] = None  # Placeholder for nested 'ne-asp' list
+    ne_application: Optional[dict] = None  # Placeholder for 'ne-application' dictionary
+    ne_site: Optional[dict] = None  # Placeholder for 'ne-site' dictionary
+    ne_virtual_element: Optional[List[dict]] = None  # Placeholder for 'ne-virtual-element' list
+    number_of_outages: Optional[int] = Field(None, alias="number-of-outages")
+    outage_duration: Optional[int] = Field(None, alias="outage-duration")
+    outage_unit_of_measure: Optional[str] = Field(None, alias="outage-unit-of-measure")
+    outages: Optional[List[dict]] = None  # Placeholder for 'outages' list
 
 class ChangeRequestResponseItem(BaseModel):
-    request_id: int
-    plan_id: int
-    request_status: str
-    approval_comments: Optional[str]
-    scheduled_start_date_time: str
-    scheduled_end_date_time: str
-    network_id: int
-    network_name: str
-    lead_time_violated: bool
-    maintenance_window_violated: bool
-    subnetwork_id: int
-    subnetwork_name: str
-    individual_cell_site: bool
-    mpe_id: int
-    change_type_id: int
-    change_type_name: str
-    occ_location: OCCLocation
-    carrier_name: str
-    impact_level_id: int
-    impact_level_name: str
-    service_impact_id: int
-    service_impact_name: str
-    risk_level_id: int
-    risk_level_name: str
-    activity_category_id: int
-    activity_category_name: str
-    activity_type_id: int
-    activity_type_name: str
-    description: str
-    location: Location
-    requester: User
-    submitter: User
-    implementer: User
-    related_ticket: Optional[RelatedTicket]
-    reference_id: str
-    project_id: int
-    created_date_time: str
-    last_modified_by: User
-    last_modified_date_time: str
-    mop_files: Optional[List[MopFile]]
-    mop_url: Optional[str]
-    mop_id: Optional[str]
-    mop_steps: Optional[List[MopStep]]
-    mop_comments: Optional[str]
-    backout_duration: str
-    backout_procedure: Optional[List[List[BackoutStep]]]
-    request_ne_list: Optional[List[RequestNE]]
-    request_contacts: Optional[List[RequestContact]]
-    request_conflicts: Optional[List[RequestConflict]]
-    additional_prop1: Optional[Dict[str, Any]]
+    request_id: Optional[int] = Field(None, alias="request-id")
+    plan_id: Optional[int] = Field(None, alias="plan-id")
+    request_status: Optional[str] = Field(None, alias="request-status")
+    approval_comments: Optional[str] = Field(None, alias="approval-comments")
+    scheduled_start_date_time: Optional[str] = Field(None, alias="scheduled-start-date-time")
+    scheduled_end_date_time: Optional[str] = Field(None, alias="scheduled-end-date-time")
+    network_id: Optional[int] = Field(None, alias="network-id")
+    network_name: Optional[str] = Field(None, alias="network-name")
+    lead_time_violated: Optional[bool] = Field(None, alias="lead-time-violated")
+    maintenance_window_violated: Optional[bool] = Field(None, alias="maintenance-window-violated")
+    subnetwork_id: Optional[int] = Field(None, alias="subnetwork-id")
+    subnetwork_name: Optional[str] = Field(None, alias="subnetwork-name")
+    individual_cell_site: Optional[bool] = Field(None, alias="individual-cell-site")
+    mpe_id: Optional[int] = Field(None, alias="mpe-id")
+    change_type_id: Optional[int] = Field(None, alias="change-type-id")
+    change_type_name: Optional[str] = Field(None, alias="change-type-name")
+    occ_location: Optional[OccLocation] = Field(None, alias="occ-location")
+    carrier_name: Optional[str] = None
+    impact_level_id: Optional[int] = Field(None, alias="impact-level-id")
+    impact_level_name: Optional[str] = Field(None, alias="impact-level-name")
+    service_impact_id: Optional[int] = Field(None, alias="service-impact-id")
+    service_impact_name: Optional[str] = Field(None, alias="service-impact-name")
+    risk_level_id: Optional[int] = Field(None, alias="risk-level-id")
+    risk_level_name: Optional[str] = Field(None, alias="risk-level-name")
+    activity_category_id: Optional[int] = Field(None, alias="activity-category-id")
+    activity_category_name: Optional[str] = Field(None, alias="activity-category-name")
+    activity_type_id: Optional[int] = Field(None, alias="activity-type-id")
+    activity_type_name: Optional[str] = Field(None, alias="activity-type-name")
+    description: Optional[str] = None
+    location: Optional[Location] = None
+    requester: Optional[User] = None
+    submitter: Optional[User] = None
+    implementer: Optional[User] = None
+    related_ticket: Optional[RelatedTicket] = None
+    reference_id: Optional[str] = Field(None, alias="reference-id")
+    project_id: Optional[int] = Field(None, alias="project-id")
+    created_date_time: Optional[str] = Field(None, alias="created-date-time")
+    last_modified_by: Optional[User] = Field(None, alias="last-modified-by")
+    last_modified_date_time: Optional[str] = Field(None, alias="last-modified-date-time")
+    mop_files: Optional[List[MopFile]] = Field(None, alias="mop-files")
+    mop_url: Optional[str] = Field(None, alias="mop-url")
+    mop_id: Optional[str] = Field(None, alias="mop-id")
+    mop_steps: Optional[List[MopStep]] = Field(None, alias="mop-steps")
+    mop_comments: Optional[str] = Field(None, alias="mop-comments")
+    backout_duration: Optional[str] = Field(None, alias="backout-duration")
+    backout_procedure: Optional[List[List[MopStep]]] = Field(None, alias="backout-procedure")
+    request_ne_list: Optional[List[RequestNE]] = Field(None, alias="request-ne-list")
+    request_contacts: Optional[List[dict]] = Field(None, alias="request-contacts")
+    request_conflicts: Optional[List[dict]] = Field(None, alias="request-conflicts")
+    additionalProp1: Optional[Dict] = None
+
 
 class ChangeRequestResponse(RootModel):
     root: List[List[ChangeRequestResponseItem]]
@@ -412,7 +588,7 @@ async def get_change_request(
         # Parse and validate response
         try:
             response_data = response.json()
-            return GetChangeRequestResponse(**response_data)
+            return GetChangeRequestResponse(response_data)
         except Exception as e:
             raise HTTPException(
                 status_code=500, detail=f"Response validation failed: {str(e)}"
