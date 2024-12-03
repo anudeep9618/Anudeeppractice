@@ -7,6 +7,43 @@
 	},
 	"item": [
 		{
+			"name": "get_access_token_method",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"client_id\": \"svc-vsop-sa\",\n  \"client_secret\": \"sdfdsgsdadsgeaga\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/get_access_token_method",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"get_access_token_method"
+					]
+				},
+				"description": "Generated from cURL: curl -X POST \"http://127.0.0.1:8000/get_access_token_method\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n  \"client_id\": \"svc-vsop-sa\",\n  \"client_secret\": \"sdfdsgsdadsgeaga\"\n}'"
+			},
+			"response": []
+		},
+		{
 			"name": "get_access_token",
 			"request": {
 				"method": "POST",
