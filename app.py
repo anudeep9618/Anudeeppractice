@@ -2,6 +2,8 @@ from fastapi import FastAPI, HTTPException, Header
 from pydantic import BaseModel, RootModel, Field
 from typing import List, Optional, Dict, Any
 import httpx
+import requests
+import json
 
 app = FastAPI()
 
@@ -507,7 +509,6 @@ async def get_user_access_token_info(username: str):
         # Handle connection issues
         raise HTTPException(status_code=500, detail=f"Request error: {str(e)}")
     
-
 @app.post("/create_change_request", response_model=ChangeRequestResponse)
 async def create_change_request(
     payload: ChangeRequestPayload,
@@ -529,26 +530,117 @@ async def create_change_request(
                 CHANGE_REQUEST_URL, headers=headers, json=payload.model_dump(by_alias=True)
             )
 
-        # Check if the external API returned an error
+        # Log response for debugging
+        print(f"Response Status: {response.status_code}, Body: {response.text}")
+
+        # Check for non-200 responses
         if response.status_code != 200:
-            raise HTTPException(status_code=response.status_code, detail=response.text)
-        
-       # Parse and validate response
+            raise HTTPException(
+                status_code=response.status_code,
+                detail=f"External API error: {response.text}"
+            )
+
         try:
             response_data = response.json()
             return ChangeRequestResponse.model_validate(response_data)
-        except Exception as e:
+        except json.JSONDecodeError as e:
             raise HTTPException(
                 status_code=500,
-                detail=f"Response validation failed: {str(e)}"
+                detail=f"Malformed JSON response: {response.text}"
             )
-        
-        # Parse and return the response from the external API
-        # return response.json()
 
     except httpx.RequestError as e:
-        # Handle connection issues
         raise HTTPException(status_code=500, detail=f"Request error: {str(e)}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
+
+@app.post("/create_change_request2", response_model=ChangeRequestResponse)
+def create_change_request(
+    payload: ChangeRequestPayload,
+    authorization: str = Header(..., alias="Authorization"),
+    jwt_token: str = Header(..., alias="jwtToken")
+):
+    CHANGE_REQUEST_URL = "https://oa-uat.ebiz.verizon.com/msjv-kirke-changemanagement/changerequests/v2"
+
+    headers = {
+        "Content-Type": "application/json",
+        "accept": "application/json",
+        "Authorization": authorization,
+        "jwtToken": jwt_token,
+    }
+
+    try:
+        # Make the POST request using the `requests` library
+        response = requests.post(
+            CHANGE_REQUEST_URL, headers=headers, json=payload.model_dump(by_alias=True)
+        )
+
+        # Log response for debugging
+        print(f"Response Status: {response.status_code}, Body: {response.text}")
+
+        # Check for non-200 responses
+        if response.status_code != 200:
+            raise HTTPException(
+                status_code=response.status_code,
+                detail=f"External API error: {response.text}"
+            )
+
+        # Parse and validate the response
+        try:
+            response_data = response.json()
+            return ChangeRequestResponse.model_validate(response_data)
+        except requests.JSONDecodeError as e:
+            raise HTTPException(
+                status_code=500,
+                detail=f"Malformed JSON response: {response.text}"
+            )
+
+    except requests.RequestException as e:
+        raise HTTPException(status_code=500, detail=f"Request error: {str(e)}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
+    
+# @app.post("/create_change_request", response_model=ChangeRequestResponse)
+# async def create_change_request(
+#     payload: ChangeRequestPayload,
+#     authorization: str = Header(..., alias="Authorization"),
+#     jwt_token: str = Header(..., alias="jwtToken")
+# ):
+#     CHANGE_REQUEST_URL = "https://oa-uat.ebiz.verizon.com/msjv-kirke-changemanagement/changerequests/v2"
+
+#     headers = {
+#         "Content-Type": "application/json",
+#         "accept": "application/json",
+#         "Authorization": authorization,
+#         "jwtToken": jwt_token,
+#     }
+
+#     try:
+#         async with httpx.AsyncClient() as client:
+#             response = await client.post(
+#                 CHANGE_REQUEST_URL, headers=headers, json=payload.model_dump(by_alias=True)
+#             )
+
+#         # Check if the external API returned an error
+#         if response.status_code != 200:
+#             raise HTTPException(status_code=response.status_code, detail=response.text)
+        
+#        # Parse and validate response
+#         try:
+#             response_data = response.json()
+#             return ChangeRequestResponse.model_validate(response_data)
+#         except Exception as e:
+#             raise HTTPException(
+#                 status_code=500,
+#                 detail=f"Response validation failed: {str(e)}"
+#             )
+        
+#         # Parse and return the response from the external API
+#         # return response.json()
+
+#     except httpx.RequestError as e:
+#         # Handle connection issues
+#         raise HTTPException(status_code=500, detail=f"Request error: {str(e)}")
     
 @app.get("/get_change_request", response_model=GetChangeRequestResponse)
 async def get_change_request(
