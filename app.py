@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Header
+from fastapi import FastAPI, HTTPException, Header, Query
 from pydantic import BaseModel, RootModel, Field
 from typing import List, Optional, Dict, Any
 import httpx
@@ -689,3 +689,40 @@ async def get_change_request(
     except httpx.RequestError as e:
         # Handle connection issues
         raise HTTPException(status_code=500, detail=f"Request error: {str(e)}")
+    
+@app.get("/location")
+async def fetch_location(
+    state: str = Query(..., description="State code (e.g., AR)"),
+    city: str = Query(..., description="City name (e.g., BISCOE)"),
+    country: str = Query(..., description="Country code (e.g., USA)"),
+    page: int = Query(0, description="Page number"),
+    apikey: str = Header(..., description="API key"),
+    Authorization: str = Header(..., description="Bearer token"),
+    jwtToken: str = Header(..., description="JWT token"),
+):
+    url = "https://oa-uat.ebiz.verizon.com/msjv-kirke-changemanagement/masterdata/location"
+    headers = {
+        "accept": "application/json",
+        "apikey": apikey,
+        "Authorization": Authorization,
+        "jwtToken": jwtToken,
+    }
+    params = {
+        "state": state,
+        "city": city,
+        "country": country,
+        "page": page,
+    }
+
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.get(url, headers=headers, params=params)
+            response.raise_for_status()
+            return response.json()
+    except httpx.RequestError as e:
+        raise HTTPException(status_code=500, detail=f"Request error: {str(e)}")
+    except httpx.HTTPStatusError as e:
+        raise HTTPException(
+            status_code=e.response.status_code,
+            detail=f"HTTP error: {e.response.text}",
+        )
