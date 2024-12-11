@@ -108,7 +108,92 @@ class RequestHandlers:
                 content=FailureResponse("get location method failed").model_dump(),
                 media_type="application/json",
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                )
+        
+    # async def handle_get_kirke_status(self, request_id: int):
+    #     try:
+    #         vzLog.log_info("get kirke status started")
+
+    #         getKirkeStatusResponsePayload = await self.kirke_service.get_kirke_status(request_id)
+    #         vzLog.log_info("get kirke status completed")
+    #         if getKirkeStatusResponsePayload is not None:
+    #             return JSONResponse(
+    #                 content=getKirkeStatusResponsePayload.model_dump(),
+    #                 media_type="application/json",
+    #                 status_code=status.HTTP_200_OK,
+    #             )
+    #         else:
+    #             return JSONResponse(
+    #                 content=FailureResponse(message="get_kirke_status method failed", status_code=status.HTTP_500_INTERNAL_SERVER_ERROR).model_dump(),
+    #                 media_type="application/json",
+    #                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+    #             )
+    #     except Exception as e:
+    #         vzLog.log_error(f"Error processing get_kirke_status for request: {request_id}")
+    #         vzLog.log_error(str(e))
+    #         vzLog.log_info("get kirke status process failed")
+    #         return JSONResponse(
+    #             content=FailureResponse("get_kirke_status method failed").model_dump(),
+    #             media_type="application/json",
+    #             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+    #         )
+        
+    async def handle_get_kirke_status(self, request_id: int):
+        try:
+            vzLog.log_info("get kirke status started")
+            get_kirke_status_response = await self.kirke_service.get_kirke_status(request_id)
+            vzLog.log_info("get kirke status completed")
+            if get_kirke_status_response is not None:
+                return JSONResponse(
+                    content=get_kirke_status_response,  # Forward JSON directly
+                    media_type="application/json",
+                    status_code=200,
+                )
+            else:
+                return JSONResponse(
+                    content={"message": "get_kirke_status method failed", "status_code": 500},
+                    media_type="application/json",
+                    status_code=500,
+                )
+        except Exception as e:
+            vzLog.log_error(f"Error processing get_kirke_status for request: {request_id}")
+            vzLog.log_error(str(e))
+            vzLog.log_info("get kirke status process failed")
+            return JSONResponse(
+                content={"message": "get_kirke_status method failed", "status_code": 500},
+                media_type="application/json",
+                status_code=500,
             )
+
+    async def handle_withdraw_kirke_request(self, request_id: int, on_behalf_of: str, authorization: str, jwt_token: str):
+        try:
+            vzLog.log_info(f"Withdraw kirke request started for {request_id} by {on_behalf_of}")
+
+            response = await self.kirke_service.withdraw_kirke_request(request_id, on_behalf_of, authorization, jwt_token)
+            vzLog.log_info("Withdraw kirke request completed")
+            if response:
+                return JSONResponse(
+                    content=response,
+                    media_type="application/json",
+                    status_code=200,
+                )
+            else:
+                return JSONResponse(
+                    content={"message": "Withdraw request failed", "status_code": 500},
+                    media_type="application/json",
+                    status_code=500,
+                )
+        except Exception as e:
+            vzLog.log_error(f"Error processing withdraw_kirke_request for {request_id}")
+            vzLog.log_error(str(e))
+            vzLog.log_info("Withdraw kirke request process failed")
+            return JSONResponse(
+                content={"message": "Withdraw request failed", "status_code": 500},
+                media_type="application/json",
+                status_code=500,
+            )
+
+
     async def handle_access_token(self, access_token_request_payload: AccessTokenRequestPayload):
         try:
             vzLog.log_info("access_token request started")

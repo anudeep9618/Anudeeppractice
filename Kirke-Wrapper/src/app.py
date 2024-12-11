@@ -187,6 +187,116 @@ async def get_access_token(access_token_request_payload: AccessTokenRequestPaylo
             media_type="application/json",
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         )
+    
+# @app.get("/kirke-wrapper/getkirke-status/{request_id}", response_model=GetKirkeStatusResponsePayload,
+#           responses={
+#               500: {"model": FailureResponse, "description": "Internal Server Error"},
+#               403: {"model": FailureResponse, "description": "Forbidden Error"},
+#           }
+#           )
+# async def get_kirke_status(request_id: int = Path(..., description="request_id to get status"), 
+#                            authorization: str = Header(..., description="Authorization token")):
+#     vzLog.log_info(f"Received get_kirke_status request for {request_id}")
+#     try:
+#         # Validate token
+#         validated = await request_handlers.handle_validate_token(authorization)
+#         if validated:
+#             # Request handler
+#             return await request_handlers.handle_get_kirke_status(request_id)
+#         else:
+#             raise HTTPException(
+#                 status_code=403,
+#                 detail="Forbidden: Access is denied"
+#             )
+#     except HTTPException as e:
+#         vzLog.log_error(e.detail)
+#         return JSONResponse(
+#             content=FailureResponse(message=e.detail, status_code=e.status_code).model_dump(),
+#             media_type="application/json",
+#             status_code=e.status_code,
+#         )
+#     except Exception as e:
+#         vzLog.log_error("Internal Server Error")
+#         return JSONResponse(
+#             content=FailureResponse("get_kirke_status method failed").model_dump(),
+#             media_type="application/json",
+#             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+#         )
+
+@app.get("/kirke-wrapper/getkirke-status/{request_id}",
+          responses={
+              200: {"description": "Success", "content": {"application/json": {}}},
+              500: {"model": FailureResponse, "description": "Internal Server Error"},
+              403: {"model": FailureResponse, "description": "Forbidden Error"},
+          }
+          )
+async def get_kirke_status(request_id: int = Path(..., description="request_id to get status"), 
+                           authorization: str = Header(..., description="Authorization token")):
+    vzLog.log_info(f"Received get_kirke_status request for {request_id}")
+    try:
+        # Validate token
+        validated = await request_handlers.handle_validate_token(authorization)
+        if validated:
+            # Request handler
+            return await request_handlers.handle_get_kirke_status(request_id)
+        else:
+            raise HTTPException(
+                status_code=403,
+                detail="Forbidden: Access is denied"
+            )
+    except HTTPException as e:
+        vzLog.log_error(e.detail)
+        return JSONResponse(
+            content={"message": e.detail, "status_code": e.status_code},
+            media_type="application/json",
+            status_code=e.status_code,
+        )
+    except Exception as e:
+        vzLog.log_error("Internal Server Error")
+        return JSONResponse(
+            content={"message": "get_kirke_status method failed", "status_code": 500},
+            media_type="application/json",
+            status_code=500,
+        )
+
+@app.patch("/kirke-wrapper/withdraw/{request_id}",
+           responses={
+               200: {"description": "Success", "content": {"application/json": {}}},
+               500: {"model": FailureResponse, "description": "Internal Server Error"},
+               403: {"model": FailureResponse, "description": "Forbidden Error"},
+           }
+           )
+async def withdraw_kirke_request(request_id: int = Path(..., description="Request ID to withdraw"),
+                                 on_behalf_of: str = Query(..., description="User performing the action"),
+                                 authorization: str = Header(..., description="Authorization token"),
+                                 jwt_token: str = Header(..., description="JWT token")):
+    vzLog.log_info(f"Received withdraw_kirke_request for {request_id} by {on_behalf_of}")
+    try:
+        # Validate token
+        validated = await request_handlers.handle_validate_token(authorization)
+        if validated:
+            # Request handler
+            return await request_handlers.handle_withdraw_kirke_request(request_id, on_behalf_of, authorization, jwt_token)
+        else:
+            raise HTTPException(
+                status_code=403,
+                detail="Forbidden: Access is denied"
+            )
+    except HTTPException as e:
+        vzLog.log_error(e.detail)
+        return JSONResponse(
+            content={"message": e.detail, "status_code": e.status_code},
+            media_type="application/json",
+            status_code=e.status_code,
+        )
+    except Exception as e:
+        vzLog.log_error("Internal Server Error")
+        return JSONResponse(
+            content={"message": "withdraw_kirke_request method failed", "status_code": 500},
+            media_type="application/json",
+            status_code=500,
+        )
+
 
 def init():
     global request_handlers

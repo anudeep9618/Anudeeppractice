@@ -330,3 +330,156 @@ class Kirke:
         except Exception as e:
             vzLog.log_error(f"get_kirke location method failed")
             return None
+        
+    # async def get_kirke_status_api(self, authorization: str, jwt_token: str, request_id: int):
+    #     vzLog.log_debug("get kirke status API started")
+    #     headers = {
+    #         "accept": "application/json",
+    #         "Authorization": f"Bearer {authorization}",
+    #         "jwtToken": jwt_token,
+    #     }
+
+    #     try:
+    #         async with httpx.AsyncClient() as client:
+    #             response = await client.get(
+    #                 f"{self.base_url}{self.get_kirke_url}{request_id}/status", headers=headers
+    #             )
+
+    #         vzLog.log_debug(f"Request URL: {response.request.url}")
+    #         vzLog.log_debug(f"Response Status: {response.status_code}")
+    #         vzLog.log_debug(f"Response Content: {response.content}")
+
+    #         # If not 200, it will raise exception
+    #         response.raise_for_status()
+    #         # Parse and validate response
+    #         response_data = response.json()
+    #         vzLog.log_debug("get kirke status API ended")
+    #         return GetKirkeStatusResponsePayload.model_validate(response_data)
+
+    #     except httpx.HTTPStatusError as e:
+    #         vzLog.log_error(f"get_kirke_status_api error, status_code={e.response.status_code}")
+    #         vzLog.log_error(f"Exception: {str(e)}")
+    #     except httpx.RequestError as e:
+    #         vzLog.log_error("get_kirke_status_api error: Network/Timeout/SSL issue")
+    #         vzLog.log_error(f"Exception: {str(e)}")
+    #     except ValidationError as e:
+    #         vzLog.log_error("get_kirke_status_api error: Response data validation error")
+    #         vzLog.log_error(f"Exception: {str(e)}")
+    #     finally:
+    #         if client:
+    #             await client.aclose()
+    #             vzLog.log_debug("HTTPX client connection closed")
+
+    # async def get_kirke_status(self, request_id: int):
+    #     vzLog.log_debug("get kirke status started")
+    #     try:
+    #         access_token_api_task = asyncio.create_task(self.get_access_token())
+    #         jwt_token_api_task = asyncio.create_task(self.get_jwt_token())
+
+    #         access_token, jwt_token = await asyncio.gather(access_token_api_task, jwt_token_api_task)
+
+    #         if access_token is not None and jwt_token is not None:
+    #             get_kirke_status_response = await self.get_kirke_status_api(access_token, jwt_token, request_id)
+    #             if get_kirke_status_response is not None:
+    #                 return get_kirke_status_response
+    #         return None
+    #     except Exception as e:
+    #         vzLog.log_error("get_kirke_status method failed")
+    #         return None
+
+    async def get_kirke_status_api(self, authorization: str, jwt_token: str, request_id: int):
+        vzLog.log_debug("get kirke status API started")
+        headers = {
+            "accept": "application/json",
+            "Authorization": f"Bearer {authorization}",
+            "jwtToken": jwt_token,
+        }
+
+        try:
+            async with httpx.AsyncClient() as client:
+                response = await client.get(
+                    f"{self.base_url}{self.get_kirke_url}{request_id}/status", headers=headers
+                )
+
+            vzLog.log_debug(f"Request URL: {response.request.url}")
+            vzLog.log_debug(f"Response Status: {response.status_code}")
+            vzLog.log_debug(f"Response Content: {response.content}")
+
+            # If not 200, raise an exception
+            response.raise_for_status()
+            # Return raw JSON response
+            vzLog.log_debug("get kirke status API ended")
+            return response.json()
+
+        except httpx.HTTPStatusError as e:
+            vzLog.log_error(f"get_kirke_status_api error, status_code={e.response.status_code}")
+            vzLog.log_error(f"Exception: {str(e)}")
+        except httpx.RequestError as e:
+            vzLog.log_error("get_kirke_status_api error: Network/Timeout/SSL issue")
+            vzLog.log_error(f"Exception: {str(e)}")
+        except Exception as e:
+            vzLog.log_error("get_kirke_status_api error: Unexpected exception")
+            vzLog.log_error(f"Exception: {str(e)}")
+        finally:
+            if client:
+                await client.aclose()
+                vzLog.log_debug("HTTPX client connection closed")
+
+    async def get_kirke_status(self, request_id: int):
+        vzLog.log_debug("get kirke status started")
+        try:
+            access_token_api_task = asyncio.create_task(self.get_access_token())
+            jwt_token_api_task = asyncio.create_task(self.get_jwt_token())
+
+            access_token, jwt_token = await asyncio.gather(access_token_api_task, jwt_token_api_task)
+
+            if access_token is not None and jwt_token is not None:
+                return await self.get_kirke_status_api(access_token, jwt_token, request_id)
+            return None
+        except Exception as e:
+            vzLog.log_error("get_kirke_status method failed")
+            return None
+        
+
+    async def withdraw_kirke_request(self, request_id: int, on_behalf_of: str, authorization: str, jwt_token: str):
+        vzLog.log_debug(f"withdraw_kirke_request API started for {request_id} by {on_behalf_of}")
+        headers = {
+            "Content-Type": "application/json",
+            "accept": "application/json",
+            "Authorization": f"Bearer {authorization}",
+            "jwtToken": jwt_token,
+        }
+        params = {"on-behalf-of": on_behalf_of}
+
+        try:
+            async with httpx.AsyncClient() as client:
+                response = await client.patch(
+                    f"{self.base_url}{self.get_kirke_url}{request_id}/withdraw",
+                    headers=headers,
+                    params=params,
+                )
+
+            vzLog.log_debug(f"Request URL: {response.request.url}")
+            vzLog.log_debug(f"Response Status: {response.status_code}")
+            vzLog.log_debug(f"Response Content: {response.content}")
+
+            # If not 200, raise exception
+            response.raise_for_status()
+            # Return raw JSON response
+            vzLog.log_debug("withdraw_kirke_request API ended")
+            return response.json()
+
+        except httpx.HTTPStatusError as e:
+            vzLog.log_error(f"withdraw_kirke_request API error, status_code={e.response.status_code}")
+            vzLog.log_error(f"Exception: {str(e)}")
+        except httpx.RequestError as e:
+            vzLog.log_error("withdraw_kirke_request API error: Network/Timeout/SSL issue")
+            vzLog.log_error(f"Exception: {str(e)}")
+        except Exception as e:
+            vzLog.log_error("withdraw_kirke_request API error: Unexpected exception")
+            vzLog.log_error(f"Exception: {str(e)}")
+        finally:
+            if client:
+                await client.aclose()
+                vzLog.log_debug("HTTPX client connection closed")
+
