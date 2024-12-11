@@ -7,6 +7,43 @@
 	},
 	"item": [
 		{
+			"name": "get_access_token_method",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"client_id\": \"svc-vsop-sa\",\n  \"client_secret\": \"sdfdsgsdadsgeaga\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/get_access_token_method",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"get_access_token_method"
+					]
+				},
+				"description": "Generated from cURL: curl -X POST \"http://127.0.0.1:8000/get_access_token_method\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n  \"client_id\": \"svc-vsop-sa\",\n  \"client_secret\": \"sdfdsgsdadsgeaga\"\n}'"
+			},
+			"response": []
+		},
+		{
 			"name": "get_access_token",
 			"request": {
 				"method": "POST",
@@ -119,6 +156,44 @@
 					]
 				},
 				"description": "Generated from cURL: curl -X POST \"http://127.0.0.1:8000/create_change_request\" \\\n-H \"Content-Type: application/json\" \\\n-H \"Authorization: Bearer your_authorization_token\" \\\n-H \"jwtToken: your_jwt_token\" \\\n-d '{\n\t\"service-impact\": \"Non-Service Affecting\",\n\t\"risk-level\" :\"INCIDENT\",\n\t\"requester\" :\"SVC-gxov_kirke_np\",\n\t\"activity-category\": \"APPLICATION\",\n\t\"activity-type\": \"RESTART\",\n\t\"ticket-number\" : \"INC1001011\",\n\t\"description\": \"Automated Kirke plan/request creation by iEN-AP\",\n\t\"network\": \"CLOUD\",\n\t\"subnetwork\": \"CORE\",\n\t\"location\": {\n\t\t\"location-id\": 48447605\n\t},\n\t\"scheduled-start-date-time\": \"2024-11-26T23:00:00.000Z\",\n\t\"scheduled-end-date-time\": \"2024-11-26T23:05:00.000Z\",\n\t\"outage-details\": {\n\t\t\"outage-info\": {\n\t\t\t\"number-of-outages\": 0,\n\t\t\t\"outage-duration\": 1,\n\t\t\t\"outage-unit-of-measure\": \"Minutes\"\n\t\t}\n\t},\n\t\"mop\": [\n\t\t{\n\t\t\t\"mop-url\": \"https://www.verizon.com\",\n\t\t\t\"mop-comments\": \"MOP details not yet provided - contact requester.\",\n\t\t\t\"backout-duration\": \"00:01\"\n\t\t}\n\t],\n\t\"submitter\": \"SVC-gxov_kirke_np\",\n\t\"network-elements\": [\n\t  {\n\t\t\"ne-type\": \"Device\",\n\t\t\"ne-id\": \"twbgohaavzwcbsf-y-or-e1-000\"\n\t }\n\t ]\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "get_change_request",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer aBcfgtrrfuj"
+					},
+					{
+						"key": "jwtToken",
+						"value": "eyJyuujjbcjvsldkv"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:8000/get_change_request?request_id=568196",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"get_change_request"
+					],
+					"query": [
+						{
+							"key": "request_id",
+							"value": "568196"
+						}
+					]
+				},
+				"description": "Generated from cURL: curl -X GET \"http://127.0.0.1:8000/get_change_request?request_id=568196\" \\\n-H \"Authorization: Bearer aBcfgtrrfuj\" \\\n-H \"jwtToken: eyJyuujjbcjvsldkv\""
 			},
 			"response": []
 		}
