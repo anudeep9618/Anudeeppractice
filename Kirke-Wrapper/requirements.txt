@@ -1,0 +1,21 @@
+# --trusted-host pypi.org
+# --index-url https://pypi.org/simple/
+# --trusted-host pypi-svc-twbgohaavzwcsai-y-ib-x-001.apps.kub1-2.twb-1.vzwops.com
+# --extra-index-url http://pypi-svc-twbgohaavzwcsai-y-ib-x-001.apps.kub1-2.twb-1.vzwops.com/simple/
+# --trusted-host netcool-noi.twbgohaavzwcsai-y-ib-x-002.vzwnet.com
+# --index-url https://netcool-noi.twbgohaavzwcsai-y-ib-x-002.vzwnet.com/pypi/simple/
+
+
+--trusted-host pypi-svc-twbgohaavzwcsai-y-ib-x-001.apps.kub1-2.twb-1.vzwops.com
+--index-url http://pypi-svc-twbgohaavzwcsai-y-ib-x-001.apps.kub1-2.twb-1.vzwops.com/simple/
+
+
+fastapi
+uvicorn
+httpx
+pydantic
+numpy==1.26.4
+vz
+vzLog
+pytz
+colorama

@@ -1,0 +1,100 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Virtual environment folders
+.env/
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# pip environment files
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+# Usually contains Python environment information
+*.manifest
+*.spec
+
+# Unit test / coverage reports
+*.cover
+*.py,cover
+.coverage
+.hypothesis/
+.pytest_cache/
+.tox/
+nosetests.xml
+coverage.xml
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# IDE and editor settings
+.vscode/
+*.code-workspace
+.idea/
+*.iml
+
+# macOS system files
+.DS_Store
+
+# Logs and databases
+*.log
+*.sqlite3
+*.db
+*.sql
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.orig
+*.swp
+
+# VS Code-specific settings
+*.code-workspace
+.vscode/settings.json
+.vscode/tasks.json
+.vscode/launch.json
+.vscode/*.code-snippets
+
+# Custom environment variables
+.env
+.env.local
+.env.*.local
+secrets.json
