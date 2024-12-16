@@ -181,7 +181,7 @@ class RequestHandlers:
                 status_code=500,
             )
 
-    async def handle_withdraw_kirke_request(self, request_id: int, on_behalf_of: str, authorization: str, jwt_token: str):
+    async def handle_withdraw_kirke_request(self, request_id: int, on_behalf_of: str):
         try:
             vzLog.log_info(f"Withdraw kirke request started for {request_id} by {on_behalf_of}")
 

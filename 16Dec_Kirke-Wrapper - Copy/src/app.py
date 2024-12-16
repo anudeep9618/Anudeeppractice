@@ -242,13 +242,10 @@ async def withdraw_request(request_id: int = Path(..., description="Request ID t
     vzLog.log_info(f"Received withdraw_kirke_request for {request_id} by {on_behalf_of}")
     try:
         # Validate token
-        # validated = await request_handlers.handle_validate_token(authorization)
-        validated = True
+        validated = await request_handlers.handle_validate_token(authorization)
         if validated:
             # Request handler
-            # return 
-            
-            await request_handlers.handle_withdraw_kirke_request(request_id, on_behalf_of)
+            return await request_handlers.handle_withdraw_kirke_request(request_id, on_behalf_of)
         else:
             raise HTTPException(
                 status_code=403,

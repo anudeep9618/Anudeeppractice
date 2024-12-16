@@ -433,7 +433,7 @@ class Kirke:
 
             vzLog.log_debug("withdraw kirke request API ended")
             if access_token is not None and jwt_token is not None:
-                withdraw_request_response = await self.withdraw_kirke_request(access_token, jwt_token, request_id, on_behalf_of)
+                withdraw_request_response = await self.withdraw_kirke_request(request_id, on_behalf_of, access_token, jwt_token)
                 if withdraw_request_response is not None:
                     return withdraw_request_response
                 else:
